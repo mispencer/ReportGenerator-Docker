@@ -1,15 +1,16 @@
+ARG PACKAGEVERSION=5.0.4
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
-
+ARG PACKAGEVERSION
 RUN apk update && \
 	dotnet new console && \
-    dotnet add package ReportGenerator --version 5.0.4 && \
+    dotnet add package ReportGenerator --version $PACKAGEVERSION && \
 	dotnet restore && \
 	rm -rf *.csproj *.cs ./obj
 	
-FROM mcr.microsoft.com/dotnet/runtime:6.0
-
+FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine
+ARG PACKAGEVERSION
 WORKDIR /app
 RUN mkdir ./coverage
-COPY --from=build ./root/.nuget/packages/reportgenerator/5.0.4/tools/net6.0/* .
+COPY --from=build ./root/.nuget/packages/reportgenerator/${PACKAGEVERSION}/tools/net6.0/* .
 
 ENTRYPOINT ["dotnet", "ReportGenerator.dll"]
