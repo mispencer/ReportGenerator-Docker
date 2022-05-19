@@ -1,4 +1,4 @@
-ARG PACKAGEVERSION=5.0.4
+ARG PACKAGEVERSION=5.1.9
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 ARG PACKAGEVERSION
 RUN apk update && \
